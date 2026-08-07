@@ -7,7 +7,8 @@
 class Motor {
 
 private:
-    float speed;
+    float currentSpeed;
+    float targetSpeed;
     const int id;
 
 public:
@@ -23,5 +24,9 @@ public:
 
     //获取ID
     int getID() const;
+
+    void setTargetSpeed(float speed);
+
+    float getTargetSpeed() const;
 
 };

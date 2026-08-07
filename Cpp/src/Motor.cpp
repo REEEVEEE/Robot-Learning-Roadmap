@@ -1,7 +1,8 @@
 #include "Motor.hpp"
 
-Motor::Motor(const int id)
-    : speed(0),
+Motor::Motor(int id)
+    : currentSpeed(0),
+      targetSpeed(0),
       id(id)
 {
 
@@ -9,15 +10,23 @@ Motor::Motor(const int id)
 
 void Motor::setSpeed(float speed)
 {
-    this->speed = speed;
+    this->currentSpeed = speed;
 }
 
 float Motor::getSpeed() const
 {
-    return speed;
+    return currentSpeed;
 }
 
 int Motor::getID() const
 {
     return id;
+}
+
+void Motor::setTargetSpeed(float speed) {
+    this->targetSpeed = speed;
+}
+
+float Motor::getTargetSpeed() const {
+    return targetSpeed;
 }

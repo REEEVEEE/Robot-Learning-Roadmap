@@ -24,3 +24,9 @@ Release/
 # Python
 __pycache__/
 *.pyc
+
+# JetBrains IDE
+.idea/
+
+# Windows executable
+*.exe

@@ -1,17 +1,32 @@
-# Robot Learning Roadmap
+# Robot-Learning-Roadmap
 
-我的机器人学习路线
+我的机器人学习路线记录。
 
-## Current Status
+## About Me
 
 - Major: Automation
-- Direction: Mobile Robot
+- Direction: Mobile Robotics
 - Goal: Robot System Engineer
 
-## Learning
+## Current Projects
+
+- STM32 motor control
+- Differential drive robot
+- ROS2 mobile robot
+
+## Learning Roadmap
 
 - Git
 - C++
 - STM32
+- Control Theory
 - ROS2
-- Control
+- Computer Vision
+
+## Hardware
+
+- STM32F103
+- Jetson
+- Encoder
+- IMU
+- Depth Camera

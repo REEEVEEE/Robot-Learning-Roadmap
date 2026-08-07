@@ -8,12 +8,12 @@ Motor::Motor(int id)
 
 }
 
-void Motor::setSpeed(float speed)
+void Motor::setCurrentSpeed(float speed)
 {
     this->currentSpeed = speed;
 }
 
-float Motor::getSpeed() const
+float Motor::getCurrentSpeed() const
 {
     return currentSpeed;
 }

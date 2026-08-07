@@ -17,10 +17,10 @@ public:
     Motor(int id);
 
     //设定速度
-    void setSpeed(float speed);
+    void setCurrentSpeed(float speed);
 
     //获取速度
-    float getSpeed() const;
+    float getCurrentSpeed() const;
 
     //获取ID
     int getID() const;

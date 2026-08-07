@@ -8,9 +8,9 @@
 int main()
 {
     Motor motor_1(1);
-    motor_1.setSpeed(100);
+    motor_1.setCurrentSpeed(100);
 
-    float speed = motor_1.getSpeed();
+    float speed = motor_1.getCurrentSpeed();
     int id = motor_1.getID();
     float targetSpeed = motor_1.getTargetSpeed();
     std::cout << speed << std::endl;

@@ -1,0 +1,26 @@
+# C++
+build/
+*.o
+*.out
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+
+# ROS2
+install/
+log/
+
+# STM32
+Debug/
+Release/
+*.axf
+*.hex
+*.bin
+
+# VSCode
+.vscode/
+
+# Python
+__pycache__/
+*.pyc

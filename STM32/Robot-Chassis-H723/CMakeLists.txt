@@ -37,7 +37,9 @@ add_executable(${CMAKE_PROJECT_NAME}
         user/m3508.c
         user/can_bus.h
         user/can_bus.c
-        )
+        user/pid.c
+        user/pid.h
+)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)

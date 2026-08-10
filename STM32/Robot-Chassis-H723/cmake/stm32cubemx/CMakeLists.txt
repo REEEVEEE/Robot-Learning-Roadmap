@@ -30,6 +30,7 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/syscalls.c
 	${CMAKE_CURRENT_SOURCE_DIR}/../../user/m3508.c
 	${CMAKE_CURRENT_SOURCE_DIR}/../../user/can_bus.c
+		${CMAKE_CURRENT_SOURCE_DIR}/../../user/pid.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../startup_stm32h723xx.s
 )
 

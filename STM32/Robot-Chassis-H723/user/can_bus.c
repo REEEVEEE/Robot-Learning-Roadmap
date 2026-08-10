@@ -29,7 +29,9 @@ void CAN_Send(const uint16_t id, const uint8_t *data) {
     if ( id > 0x7FF ) return;
     txHeader.Identifier = id;
 
-    HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &txHeader, data);
+    if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &txHeader, data) != HAL_OK) {
+        Error_Handler();
+    }
 
 }
 

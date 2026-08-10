@@ -23,7 +23,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "can_bus.h"
+#include "m3508.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,7 +45,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+M3508_t motor1;
+M3508_t motor2;
+M3508_t motor3;
+M3508_t motor4;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,7 +97,11 @@ int main(void)
   MX_GPIO_Init();
   MX_FDCAN1_Init();
   /* USER CODE BEGIN 2 */
-
+  M3508_Init(&motor1, 0x201);
+  M3508_Init(&motor2, 0x202);
+  M3508_Init(&motor3, 0x203);
+  M3508_Init(&motor4, 0x204);
+  CAN_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */

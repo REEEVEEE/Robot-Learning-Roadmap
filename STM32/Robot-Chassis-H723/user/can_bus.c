@@ -3,11 +3,17 @@
 //
 
 #include "can_bus.h"
+#include "m3508.h"
 
 extern FDCAN_HandleTypeDef hfdcan1;
 FDCAN_TxHeaderTypeDef txHeader;
 FDCAN_FilterTypeDef filter;
 FDCAN_RxHeaderTypeDef rxHeader;
+
+extern M3508_t motor1;
+extern M3508_t motor2;
+extern M3508_t motor3;
+extern M3508_t motor4;
 
 uint8_t RX_Buffer[8];
 
@@ -64,6 +70,24 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
     if (hfdcan == &hfdcan1 && (RxFifo1ITs & FDCAN_IT_RX_FIFO1_NEW_MESSAGE) != 0) {
         if (HAL_FDCAN_GetRxMessage(&hfdcan1, FDCAN_RX_FIFO1, &rxHeader, RX_Buffer) != HAL_OK) {
             Error_Handler();
+        }
+        else {
+            switch (rxHeader.Identifier) {
+                case 0x201:
+                    M3508_UpdateFeedback(&motor1, RX_Buffer);
+                    break;
+                case 0x202:
+                    M3508_UpdateFeedback(&motor2, RX_Buffer);
+                    break;
+                case 0x203:
+                    M3508_UpdateFeedback(&motor3, RX_Buffer);
+                    break;
+                case 0x204:
+                    M3508_UpdateFeedback(&motor4, RX_Buffer);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ set(MX_Include_Dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/CMSIS/Device/ST/STM32H7xx/Include
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Drivers/CMSIS/Include
+	${CMAKE_CURRENT_SOURCE_DIR}/../../user
 )
 
 # STM32CubeMX generated application sources
@@ -27,6 +28,8 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/stm32h7xx_hal_msp.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/sysmem.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/syscalls.c
+	${CMAKE_CURRENT_SOURCE_DIR}/../../user/m3508.c
+	${CMAKE_CURRENT_SOURCE_DIR}/../../user/can_bus.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../startup_stm32h723xx.s
 )
 

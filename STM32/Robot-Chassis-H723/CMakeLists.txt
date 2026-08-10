@@ -32,7 +32,12 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 enable_language(C ASM)
 
 # Create an executable object type
-add_executable(${CMAKE_PROJECT_NAME})
+add_executable(${CMAKE_PROJECT_NAME}
+        user/m3508.h
+        user/m3508.c
+        user/can_bus.h
+        user/can_bus.c
+        )
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)

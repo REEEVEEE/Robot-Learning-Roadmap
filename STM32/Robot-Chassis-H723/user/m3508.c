@@ -10,6 +10,7 @@ static uint8_t Current_Data[8];
 void M3508_Init(M3508_t *motor, uint16_t id) {
     motor->id = id;
     motor->targetCurrent = 0;
+    motor->targetSpeed = 0;
 
     motor->angle = 0;
     motor->speed = 0;
@@ -47,4 +48,8 @@ void M3508_UpdateFeedback(M3508_t *motor, const uint8_t *data) {
     motor->current = (int16_t)((uint16_t)data[4]<<8 | data[5]);
     motor->temperature = data[6];
 
+}
+
+void M3508_SetSpeed(M3508_t *motor, int16_t speed) {
+    motor->targetSpeed = speed;
 }

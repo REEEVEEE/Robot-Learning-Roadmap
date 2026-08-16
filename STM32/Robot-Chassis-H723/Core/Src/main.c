@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "can_bus.h"
 #include "m3508.h"
+#include "pid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,18 +50,31 @@ M3508_t motor1;
 M3508_t motor2;
 M3508_t motor3;
 M3508_t motor4;
+
+PID motor1_pid;
+PID motor2_pid;
+PID motor3_pid;
+PID motor4_pid;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
-
+static void Motor_SpeedControl(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void Motor_SpeedControl(void) {
+    M3508_SetCurrent(&motor1, (int16_t)PID_Calculate(&motor1_pid, motor1.targetSpeed, motor1.speed));
+    M3508_SetCurrent(&motor2, (int16_t)PID_Calculate(&motor2_pid, motor2.targetSpeed, motor2.speed));
+    M3508_SetCurrent(&motor3, (int16_t)PID_Calculate(&motor3_pid, motor3.targetSpeed, motor3.speed));
+    M3508_SetCurrent(&motor4, (int16_t)PID_Calculate(&motor4_pid, motor4.targetSpeed, motor4.speed));
 
+    M3508_SendCurrent(&motor1, &motor2, &motor3, &motor4);
+}
 /* USER CODE END 0 */
 
 /**
@@ -101,6 +115,10 @@ int main(void)
   M3508_Init(&motor2, 0x202);
   M3508_Init(&motor3, 0x203);
   M3508_Init(&motor4, 0x204);
+  PID_Init(&motor1_pid, 0, 0, 0, 0.001f, 0, 3000);
+  PID_Init(&motor2_pid, 0, 0, 0, 0.001f, 0, 3000);
+  PID_Init(&motor3_pid, 0, 0, 0, 0.001f, 0, 3000);
+  PID_Init(&motor4_pid, 0, 0, 0, 0.001f, 0, 3000);
   CAN_Init();
   /* USER CODE END 2 */
 

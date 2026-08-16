@@ -18,15 +18,18 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "FreeRTOS.h"
-#include "task.h"
-#include "main.h"
-#include "FreeRTOS.h"
 #include "cmsis_os2.h"
+#include "FreeRTOS.h"
+#include "FreeRTOS.h"
+#include "main.h"
+#include "task.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "can_bus.h"
+#include "m3508.h"
+#include "motor_manager.h"
+#include "pid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,7 +49,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+CanRxMessage_t CanRxMessage;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -68,6 +71,11 @@ const osThreadAttr_t MotorControlTas_attributes = {
   .name = "MotorControlTas",
   .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityAboveNormal,
+};
+/* Definitions for CanRxQueue */
+osMessageQueueId_t CanRxQueueHandle;
+const osMessageQueueAttr_t CanRxQueue_attributes = {
+  .name = "CanRxQueue"
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -103,6 +111,10 @@ void MX_FREERTOS_Init(void) {
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of CanRxQueue */
+  CanRxQueueHandle = osMessageQueueNew (16, sizeof(CanRxMessage_t), &CanRxQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -119,6 +131,13 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  CAN_Init();
+
+  PID_Init(&motor_pid_1, 0, 0, 0, 0.001f, 2000, 2000);
+  PID_Init(&motor_pid_2, 0, 0, 0, 0.001f, 2000, 2000);
+  PID_Init(&motor_pid_3, 0, 0, 0, 0.001f, 2000, 2000);
+  PID_Init(&motor_pid_4, 0, 0, 0, 0.001f, 2000, 2000);
+
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -158,7 +177,23 @@ void StartCanRxTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+      osStatus_t status = osMessageQueueGet(CanRxQueueHandle, &CanRxMessage, NULL, osWaitForever);
+      if (status == osOK) {
+          switch (CanRxMessage.id) {
+              case 0x201:
+                  M3508_UpdateFeedback(&motor_1, CanRxMessage.data);
+                  break;
+              case 0x202:
+                  M3508_UpdateFeedback(&motor_2, CanRxMessage.data);
+                  break;
+              case 0x203:
+                  M3508_UpdateFeedback(&motor_3, CanRxMessage.data);
+                  break;
+              case 0x204:
+                  M3508_UpdateFeedback(&motor_4, CanRxMessage.data);
+                  break;
+          }
+      }
   }
   /* USER CODE END StartCanRxTask */
 }
@@ -173,10 +208,19 @@ void StartCanRxTask(void *argument)
 void StartMotorControlTask(void *argument)
 {
   /* USER CODE BEGIN StartMotorControlTask */
+  uint32_t last_wake_time = osKernelGetTickCount();
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    motor_1.targetCurrent = (int16_t)PID_Calculate(&motor_pid_1, motor_1.targetSpeed, motor_1.speed);
+    motor_2.targetCurrent = (int16_t)PID_Calculate(&motor_pid_2, motor_2.targetSpeed, motor_2.speed);
+    motor_3.targetCurrent = (int16_t)PID_Calculate(&motor_pid_3, motor_3.targetSpeed, motor_3.speed);
+    motor_4.targetCurrent = (int16_t)PID_Calculate(&motor_pid_4, motor_4.targetSpeed, motor_4.speed);
+
+    M3508_SendCurrent(&motor_1, &motor_2, &motor_3, &motor_4);
+
+    last_wake_time += 1;
+    osDelayUntil(last_wake_time);
   }
   /* USER CODE END StartMotorControlTask */
 }
